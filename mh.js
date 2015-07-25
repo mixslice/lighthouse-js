@@ -1,10 +1,3 @@
-/*
- Heavily inspired by the original js library copyright Mixpanel, Inc.
- (http://mixpanel.com/)
-
- Modifications by Carl Sverre
- */
-
 var Client = function(token) {
     var metrics = {};
 
