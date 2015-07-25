@@ -8,6 +8,8 @@
 <script src="mh.js"></script>
 <script>
     var c = Client("TEST-PROJECT");
+    c.identify('123');
+    c.register({target: "target"});
     c.track('myevent');
 </script>
 </body>

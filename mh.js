@@ -44,9 +44,7 @@ var Client = function(token) {
 
             };
             xhr.open("POST", url, true);
-            xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
             xhr.send(JSON.stringify(request_data));
 
         };
@@ -67,6 +65,23 @@ var Client = function(token) {
         });
     };
 
+    metrics.mergeObject = function(obj1, obj2) {
+        for (var k in obj2) {
+            if (obj2.hasOwnProperty(k)) {
+                obj1[k] = obj2[k];
+            }
+        }
+    };
+
+    metrics.register = function(properties) {
+        metrics.properties = metrics.properties || {};
+        metrics.mergeObject(metrics.properties, properties);
+    };
+
+    metrics.identify = function(uid) {
+        metrics.userIdentifier = uid;
+    };
+
     /**
      track(event, properties, callback)
      ---
@@ -78,13 +93,17 @@ var Client = function(token) {
      finished or an error occurs
      */
     metrics.track = function(event, properties, callback) {
+        if (!metrics.properties) { metrics.properties = {}; }
         if (!properties) { properties = {}; }
         properties.time = get_unixtime();
+
+        var merged_properties = JSON.parse(JSON.stringify(metrics.properties));
+        metrics.mergeObject(merged_properties, properties);
 
         var data = {
             'event' : event,
             'projectToken' : metrics.token,
-            'properties' : properties
+            'properties' : merged_properties
         };
         if (metrics.userIdentifier) { data.userIdentifier = metrics.userIdentifier; }
 
@@ -105,11 +124,7 @@ var Client = function(token) {
      maihoo client config
      */
     metrics.set_config = function(config) {
-        for (var c in config) {
-            if (config.hasOwnProperty(c)) {
-                metrics.config[c] = config[c];
-            }
-        }
+        metrics.mergeObject(metrics.config, config);
     };
 
     return metrics;
