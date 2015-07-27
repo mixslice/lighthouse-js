@@ -9,6 +9,14 @@ var Client = function(token) {
 
     metrics.token = token;
 
+    function cookie(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]}
+    var _mh = cookie('_mh');
+    if (!_mh) {
+        _mh = '';
+        document.cookie = '_mh=' + _mh;
+    }
+    metrics.userIdentifier = _mh;
+
     // private utility function
     var get_unixtime = function() {
         return parseInt(new Date().getTime().toString().substring(0,10), 10);
