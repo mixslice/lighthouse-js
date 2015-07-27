@@ -1,0 +1,8 @@
+{
+  "name": "track",
+  "version": "0.0.3",
+  "description": "",
+  "dependencies": {
+    "mixpanel": "0.2.1"
+  }
+}

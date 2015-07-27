@@ -6,13 +6,13 @@
 </head>
 <body>
 <a href="javascript:void(0);">test</a>
-<script src="mh.js"></script>
+<script src="../src/mh.js"></script>
 <script>
     var c = Client("PHILIP-PROJECT");
     c.identify('123');
     c.register({target: "target"});
     c.track('myevent');
-    c.track_link('a', 'link');
+    c.track_links('a', 'link');
 </script>
 </body>
 </html>

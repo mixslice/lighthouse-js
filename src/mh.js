@@ -126,7 +126,7 @@ var Client = function(token) {
     /**
      * track link
      */
-    metrics.track_link = function(query, event, properties) {
+    metrics.track_links = function(query, event, properties) {
         var els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
         els.forEach(function (e) {
             e.removeEventListener();
