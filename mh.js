@@ -52,7 +52,7 @@ var Client = function(token) {
 
             };
             xhr.open("POST", url, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('Content-Type', 'text/plain');
             xhr.send(JSON.stringify(request_data));
 
         };
@@ -121,6 +121,19 @@ var Client = function(token) {
         }
 
         metrics.send_request(data,callback);
+    };
+
+    /**
+     * track link
+     */
+    metrics.track_link = function(query, event, properties) {
+        var els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
+        els.forEach(function (e) {
+            e.removeEventListener();
+            e.addEventListener('click', function () {
+                metrics.track(event, properties);
+            });
+        });
     };
 
     /**
