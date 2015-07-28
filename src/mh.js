@@ -9,10 +9,20 @@ var Client = function(token) {
 
     metrics.token = token;
 
-    function cookie(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]}
+    var generateUUID = function() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    };
+
+    var cookie = function(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]};
     var _mh = cookie('_mh');
     if (!_mh) {
-        _mh = '';
+        _mh = generateUUID();
         document.cookie = '_mh=' + _mh;
     }
     metrics.userIdentifier = _mh;
