@@ -11,13 +11,13 @@
 构建 client 实例:
 
 ```javascript
-var c = Client('PHILIP-PROJECT');
+var c = Client(<YOUR_PROJECT_NAME>);
 ```
 
 如何有登录用户可以直接绑定 `id`，如无用户，则自动生成 `uuid` 写入浏览器 cookie:
 
 ```javascript
-c.identify(`{user_id}`);
+c.identify(<USER_ID>);
 ```
 
 对于每次都要发送的变量可以通过 `register` 方法发送:
