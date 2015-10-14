@@ -1,9 +1,9 @@
 # 使用帮助
 
-下载 `mh.min.js`，引入 script:
+引入 script:
 
 ```html
-<script src="/path/to/mh.min.js"></script>
+<script src="http://track.digitwalk.com/mh.min.js"></script>
 ```
 
 构建 client 实例:
