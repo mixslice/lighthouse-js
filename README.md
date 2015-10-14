@@ -1,5 +1,7 @@
 # 使用帮助
 
+[![build status](http://gitlab.digitwalk.com/ci/projects/12/status.png?ref=master)](http://gitlab.digitwalk.com/ci/projects/12?ref=master)
+
 引入 script:
 
 ```html
