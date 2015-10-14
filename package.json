@@ -2,5 +2,11 @@
   "name": "track-script",
   "private": true,
   "version": "0.0.3",
-  "description": ""
+  "description": "",
+  "scripts": {
+    "build": "uglifyjs src/mh.js -o src/mh.min.js"
+  },
+  "dependencies": {
+    "uglify-js": "^2.5.0"
+  }
 }

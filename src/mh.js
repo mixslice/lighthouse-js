@@ -4,7 +4,7 @@ var Client = function(token) {
     metrics.config = {
         test: false,
         debug: false,
-        endpoint_path: "http://api.digitwalk.com/gw/track"
+        endpoint_path: "http://svr.digitwalk.com/gw/track"
     };
 
     metrics.token = token;
