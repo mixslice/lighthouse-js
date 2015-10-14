@@ -38,6 +38,8 @@ TODO: 追踪 link 点击:
 c.track_links('a', 'link');
 ```
 
+##微信的数据和转发监测示例
+
 ```javascript
     /* 三个工具用来修改转发URL */
     function getParameterByName(name) {
