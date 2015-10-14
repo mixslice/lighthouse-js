@@ -4,7 +4,7 @@
   "version": "0.0.3",
   "description": "",
   "scripts": {
-    "build": "uglifyjs src/mh.js -o src/mh.min.js"
+    "build": "uglifyjs src/mh.js -c -m -o src/mh.min.js"
   },
   "dependencies": {
     "uglify-js": "^2.5.0"
