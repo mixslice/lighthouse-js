@@ -1,0 +1,5 @@
+web:
+  image: registry.digitwalk.com/track-script
+  ports:
+   - "3004:80"
+  restart: always
