@@ -8,11 +8,11 @@
   <a href="javascript:void(0);">test</a>
   <script src="/static/mh.min.js"></script>
   <script>
-  var c = Client('PHILIP-PROJECT');
+  var c = new Client('PHILIP-PROJECT');
   //    c.identify('123');
   c.register({target: 'target'});
   c.track('myevent');
-  c.track_links('a', 'link');
+  c.trackLinks('a', 'link');
   </script>
 </body>
 </html>

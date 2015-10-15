@@ -1,5 +1,4 @@
-export default class Client {
-
+global.Client = class Client {
   constructor(token) {
     this.token = token;
 
@@ -55,11 +54,11 @@ export default class Client {
     function ajax(url, success, failure) {
       const xhr = new XMLHttpRequest();
       xhr.onreadystatechange = () => {
-        if (this.readyState === 4) {
-          if (this.status === 200) {
-            success(this.responseText);
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            success(xhr.responseText);
           } else {
-            failure(this.statusText);
+            failure(xhr.statusText);
           }
         }
       };
@@ -137,7 +136,7 @@ export default class Client {
       console.log(data);
     }
 
-    this.send_request(data, callback);
+    this.sendRequest(data, callback);
   }
 
   /**
@@ -163,4 +162,4 @@ export default class Client {
   setConfig(config) {
     this.mergeObject(this.config, config);
   }
-}
+};
