@@ -158,15 +158,18 @@ class Maihoo {
     });
   }
 
-  getShareLink() {
+  getShareLink(link) {
     const openid = this.properties.openid;
     const cid = this.properties.__cid__;
 
-    let share = this.removeURLParameter(location.href, 'code');
+    let share = link || location.href;
+
+    share = this.removeURLParameter(share, 'code');
     share = this.removeURLParameter(share, 'state');
     share = this.removeURLParameter(share, '__cid__');
     share = this.removeURLParameter(share, '__pid__');
     share = share.split('#')[0] + '&__cid__=' + openid + '&__pid__=' + cid;
+
     return share;
   }
 

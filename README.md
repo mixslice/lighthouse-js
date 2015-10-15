@@ -55,7 +55,8 @@ maihoo.track('view');
 ```javascript
 /* 修改微信转发链接 */
 wx.ready(function(){
-  var share = maihoo.getShareLink();
+  // 如果没有link可以用 maihoo.getShareLink()
+  var share = maihoo.getShareLink(link);
 
   wx.onMenuShareAppMessage({
     title: 'Nysnetech | We brought you customers (NYST_APP_20150725)',
