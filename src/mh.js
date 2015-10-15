@@ -87,6 +87,10 @@ class Maihoo {
 
   mergeObject(obj1, obj2) {
     for (const prop in obj2) {
+      if (!obj1[prop]) {
+        continue;
+      }
+
       if (obj2.hasOwnProperty(prop)) {
         obj1[prop] = obj2[prop];
       }
@@ -184,13 +188,12 @@ class Maihoo {
   finished or an error occurs
   */
   track(event, properties, callback) {
-    if (!this.properties) { this.properties = {}; }
-    let newProperties = properties;
-    if (!newProperties) { newProperties = {}; }
+    this.properties = this.properties || {};
+    const newProperties = properties || {};
     newProperties.time = this.getUnixtime();
 
     const mergedProperties = JSON.parse(JSON.stringify(this.properties));
-    this.mergeObject(newProperties, properties);
+    this.mergeObject(mergedProperties, newProperties);
 
     const data = {
       event: event,
