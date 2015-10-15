@@ -72,7 +72,7 @@ class Maihoo {
       // Got some data
       if (callback !== undefined) {
         const error = (responseData !== '1')
-          ? new Error('Maihoo Server Error') : undefined;
+        ? new Error('Maihoo Server Error') : undefined;
         callback(error);
       }
     }, error => {
@@ -100,6 +100,74 @@ class Maihoo {
 
   identify(uid) {
     this.userIdentifier = uid;
+  }
+
+  // link generator
+  getParameterByName(name) {
+    const newName = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    const regex = new RegExp('[\\?&]' + newName + '=([^&#]*)');
+    const results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
+
+  updateQueryStringParameter(uri, key, value) {
+    const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
+    const separator = uri.indexOf('?') !== -1 ? '&' : '?';
+    if (uri.match(re)) {
+      return uri.replace(re, '$1' + key + '=' + value + '$2');
+    }
+
+    return uri + separator + key + '=' + value;
+  }
+
+  removeURLParameter(url, parameter) {
+    // prefer to use l.search if you have a location/link object
+    const urlparts = url.split('?');
+    if (urlparts.length >= 2) {
+      const prefix = encodeURIComponent(parameter) + '=';
+      const pars = urlparts[1].split(/[&;]/g);
+
+      // reverse iteration as may be destructive
+      for (let idx = pars.length; idx-- > 0;) {
+        // idiom for string.startsWith
+        if (pars[idx].lastIndexOf(prefix, 0) !== -1) {
+          pars.splice(idx, 1);
+        }
+      }
+
+      return urlparts[0] + '?' + pars.join('&');
+    }
+
+    return url;
+  }
+
+  registerSocial(openid) {
+    const cid = this.getParameterByName('__cid__');
+    const pid = this.getParameterByName('__pid__');
+    const target = this.getParameterByName('__target__');
+
+    if (openid && openid.length > 0) {
+      this.identify(openid);
+    }
+
+    this.register({
+      target: target,
+      cid: cid,
+      pid: pid,
+      openid: openid
+    });
+  }
+
+  getShareLink() {
+    const openid = this.properties.openid;
+    const cid = this.properties.__cid__;
+
+    let share = this.removeURLParameter(location.href, 'code');
+    share = this.removeURLParameter(share, 'state');
+    share = this.removeURLParameter(share, '__cid__');
+    share = this.removeURLParameter(share, '__pid__');
+    share = share.split('#')[0] + '&__cid__=' + openid + '&__pid__=' + cid;
+    return share;
   }
 
   /**
@@ -147,7 +215,7 @@ class Maihoo {
     els.forEach(el => {
       el.removeEventListener();
       el.addEventListener('click', () =>
-        this.track(event, properties));
+      this.track(event, properties));
     });
   }
 
@@ -166,6 +234,10 @@ class Maihoo {
 
 const _mhq = window._mhq || '';
 const maihoo = new Maihoo(_mhq);
-// maihoo.track('page start');
-// maihoo.track('page end');
+maihoo.track('page start');
+
+window.onunload = () => {
+  maihoo.track('page end');
+};
+
 global.maihoo = maihoo;
