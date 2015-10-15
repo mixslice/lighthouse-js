@@ -1,35 +1,40 @@
 export default class Client {
 
-  metrics.config = {
-    test: false,
-    debug: false,
-    endpoint_path: "http://svr.digitwalk.com/gw/track"
-  };
-  
-  metrics.token = token;
+  constructor(token) {
+    this.token = token;
 
-  var generateUUID = function() {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = (d + Math.random()*16)%16 | 0;
-      d = Math.floor(d/16);
-      return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    this.config = {
+      test: false,
+      debug: false,
+      endpoint_path: 'http://svr.digitwalk.com/gw/track'
+    };
+
+    let _mh = this.getCookie('_mh');
+    if (!_mh) {
+      _mh = this.generateUUID();
+      document.cookie = '_mh=' + _mh;
+    }
+    this.userIdentifier = _mh;
+  }
+
+  getCookie(key) {
+    return (document.cookie.match('(^|; )' + key + '=([^;]*)') || 0)[2];
+  }
+
+  generateUUID() {
+    let date = new Date().getTime();
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, character => {
+      const randNumber = (date + Math.random() * 16) % 16 | 0;
+      date = Math.floor(randNumber / 16);
+      return (character === 'x' ? randNumber : (randNumber & 0x3 | 0x8)).toString(16);
     });
     return uuid;
-  };
-
-  var cookie = function(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]};
-  var _mh = cookie('_mh');
-  if (!_mh) {
-    _mh = generateUUID();
-    document.cookie = '_mh=' + _mh;
   }
-  metrics.userIdentifier = _mh;
 
   // private utility function
-  var get_unixtime = function() {
-    return parseInt(new Date().getTime().toString().substring(0,10), 10);
-  };
+  getUnixtime() {
+    return parseInt(new Date().getTime().toString().substring(0, 10), 10);
+  }
 
   /**
   send_request(data)
@@ -40,64 +45,63 @@ export default class Client {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  metrics.send_request = function(data, callback) {
-    var request_data = JSON.parse(JSON.stringify(data));
+  sendRequest(data, callback) {
+    const requestData = JSON.parse(JSON.stringify(data));
 
-    if (metrics.config.test) { request_data.test = 1; }
+    if (this.config.test) { requestData.test = 1; }
 
-    var request_url = metrics.config.endpoint_path;
+    const requestUrl = this.config.endpoint_path;
 
-    var ajax = function(url, success, failure){
-
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function(){
-        if (this.readyState == 4) {
-          if (this.status == 200) {
+    function ajax(url, success, failure) {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = () => {
+        if (this.readyState === 4) {
+          if (this.status === 200) {
             success(this.responseText);
           } else {
             failure(this.statusText);
           }
         }
-
       };
-      xhr.open("POST", url, true);
+
+      xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'text/plain');
-      xhr.send(JSON.stringify(request_data));
+      xhr.send(JSON.stringify(requestData));
+    }
 
-    };
-
-    ajax(request_url, function(data){
+    ajax(requestUrl, responseData => {
       // Got some data
-      if(callback !== undefined) {
-        var e = (data != '1') ? new Error("Maihoo Server Error") : undefined;
-        callback(e);
+      if (callback !== undefined) {
+        const error = (responseData !== '1')
+          ? new Error('Maihoo Server Error') : undefined;
+        callback(error);
       }
-    }, function (e) {
-      if(metrics.config.debug) {
-        console.log("Got Error: " + e.message);
+    }, error => {
+      if (this.config.debug) {
+        console.log('Got Error: ' + error.message);
       }
-      if(callback !== undefined) {
-        callback(e);
+      if (callback !== undefined) {
+        callback(error);
       }
     });
-  };
+  }
 
-  metrics.mergeObject = function(obj1, obj2) {
-    for (var k in obj2) {
-      if (obj2.hasOwnProperty(k)) {
-        obj1[k] = obj2[k];
+  mergeObject(obj1, obj2) {
+    for (const prop in obj2) {
+      if (obj2.hasOwnProperty(prop)) {
+        obj1[prop] = obj2[prop];
       }
     }
-  };
+  }
 
-  metrics.register = function(properties) {
-    metrics.properties = metrics.properties || {};
-    metrics.mergeObject(metrics.properties, properties);
-  };
+  register(properties) {
+    this.properties = this.properties || {};
+    this.mergeObject(this.properties, properties);
+  }
 
-  metrics.identify = function(uid) {
-    metrics.userIdentifier = uid;
-  };
+  identify(uid) {
+    this.userIdentifier = uid;
+  }
 
   /**
   track(event, properties, callback)
@@ -109,41 +113,44 @@ export default class Client {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  metrics.track = function(event, properties, callback) {
-    if (!metrics.properties) { metrics.properties = {}; }
-    if (!properties) { properties = {}; }
-    properties.time = get_unixtime();
+  track(event, properties, callback) {
+    if (!this.properties) { this.properties = {}; }
+    let newProperties = properties;
+    if (!newProperties) { newProperties = {}; }
+    newProperties.time = this.getUnixtime();
 
-    var merged_properties = JSON.parse(JSON.stringify(metrics.properties));
-    metrics.mergeObject(merged_properties, properties);
+    const mergedProperties = JSON.parse(JSON.stringify(this.properties));
+    this.mergeObject(newProperties, properties);
 
-    var data = {
-      'event' : event,
-      'projectToken' : metrics.token,
-      'properties' : merged_properties
+    const data = {
+      event: event,
+      projectToken: this.token,
+      properties: mergedProperties
     };
-    if (metrics.userIdentifier) { data.userIdentifier = metrics.userIdentifier; }
 
-    if(metrics.config.debug) {
-      console.log("Sending the following event to Maihoo:");
+    if (this.userIdentifier) {
+      data.userIdentifier = this.userIdentifier;
+    }
+
+    if (this.config.debug) {
+      console.log('Sending the following event to Maihoo:');
       console.log(data);
     }
 
-    metrics.send_request(data,callback);
-  };
+    this.send_request(data, callback);
+  }
 
   /**
   * track link
   */
-  metrics.track_links = function(query, event, properties) {
-    var els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
-    els.forEach(function (e) {
-      e.removeEventListener();
-      e.addEventListener('click', function () {
-        metrics.track(event, properties);
-      });
+  trackLinks(query, event, properties) {
+    const els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
+    els.forEach(el => {
+      el.removeEventListener();
+      el.addEventListener('click', () =>
+        this.track(event, properties));
     });
-  };
+  }
 
   /**
   set_config(config)
@@ -153,9 +160,7 @@ export default class Client {
   config:object       an object with properties to override in the
   maihoo client config
   */
-  metrics.set_config = function(config) {
-    metrics.mergeObject(metrics.config, config);
-  };
-
-  return metrics;
-};
+  setConfig(config) {
+    this.mergeObject(this.config, config);
+  }
+}

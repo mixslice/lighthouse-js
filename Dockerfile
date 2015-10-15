@@ -1,3 +1,3 @@
 FROM smebberson/alpine-nginx
 
-ADD src /usr/share/nginx/html
+ADD dist /usr/share/nginx/html
