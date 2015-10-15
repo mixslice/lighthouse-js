@@ -189,7 +189,7 @@ class Maihoo {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  track(event, properties, callback, async = false) {
+  track(event, properties, callback, async = true) {
     this.properties = this.properties || {};
     const newProperties = properties || {};
     newProperties.time = this.getUnixtime();
