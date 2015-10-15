@@ -99,6 +99,7 @@ class Maihoo {
   }
 
   identify(uid) {
+    this.register({ uid: this.userIdentifier });
     this.userIdentifier = uid;
   }
 
@@ -141,7 +142,7 @@ class Maihoo {
     return url;
   }
 
-  registerSocial(openid) {
+  registerSocial(openid, service) {
     const cid = this.getParameterByName('__cid__');
     const pid = this.getParameterByName('__pid__');
     const target = this.getParameterByName('__target__');
@@ -154,7 +155,8 @@ class Maihoo {
       target: target,
       cid: cid,
       pid: pid,
-      openid: openid
+      openid: openid,
+      service: service
     });
   }
 

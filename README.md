@@ -25,7 +25,8 @@ maihoo.track('myevent');
 
 ```javascript
 var openid = <openid>    // 从微信或微博中获取openid，请自行补充
-maihoo.registerSocial(openid);
+var service = 'weixin'; // weixin 或者 weibo
+maihoo.registerSocial(openid, service);
 maihoo.track('view');
 ```
 
@@ -67,7 +68,7 @@ wx.ready(function(){
 
 ## API
 
-### func: identify
+### func: identify(string)
 
 如何有登录用户可以直接绑定 `id`，如无用户，则自动生成 `uuid` 写入浏览器 cookie:
 
@@ -75,7 +76,7 @@ wx.ready(function(){
 maihoo.identify(<USER_ID>);
 ```
 
-### func: register
+### func: register(params)
 
 对于每次都要发送的变量可以通过 `register` 方法发送:
 
@@ -83,7 +84,7 @@ maihoo.identify(<USER_ID>);
 maihoo.register({target: "target"});
 ```
 
-### func: track
+### func: track(event, params)
 
 追踪事件:
 
@@ -97,10 +98,10 @@ maihoo.track('myevent', params);
 maihoo.trackLinks('a', 'link');
 ```
 
-### func: registerSocial
+### func: registerSocial(openid, service)
 
 用户登录之后发送注册信息
 
-### func: getShareLink
+### func: getShareLink(link)
 
 获取 微信/微博 转发链接
