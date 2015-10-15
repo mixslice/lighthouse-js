@@ -1,4 +1,4 @@
-global.Client = class Client {
+class Maihoo {
   constructor(token) {
     this.token = token;
 
@@ -162,4 +162,10 @@ global.Client = class Client {
   setConfig(config) {
     this.mergeObject(this.config, config);
   }
-};
+}
+
+const _mhq = window._mhq || '';
+const maihoo = new Maihoo(_mhq);
+// maihoo.track('page start');
+// maihoo.track('page end');
+global.maihoo = maihoo;
