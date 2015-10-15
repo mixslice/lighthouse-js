@@ -87,10 +87,6 @@ class Maihoo {
 
   mergeObject(obj1, obj2) {
     for (const prop in obj2) {
-      if (!obj1[prop]) {
-        continue;
-      }
-
       if (obj2.hasOwnProperty(prop)) {
         obj1[prop] = obj2[prop];
       }
