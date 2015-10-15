@@ -44,7 +44,7 @@ class Maihoo {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  sendRequest(data, callback) {
+  sendRequest(data, callback, async = true) {
     const requestData = JSON.parse(JSON.stringify(data));
 
     if (this.config.test) { requestData.test = 1; }
@@ -63,26 +63,30 @@ class Maihoo {
         }
       };
 
-      xhr.open('POST', url, true);
+      xhr.open('POST', url, async);
       xhr.setRequestHeader('Content-Type', 'text/plain');
       xhr.send(JSON.stringify(requestData));
     }
 
-    ajax(requestUrl, responseData => {
+    const successBlock = responseData => {
       // Got some data
       if (callback !== undefined) {
         const error = (responseData !== '1')
         ? new Error('Maihoo Server Error') : undefined;
         callback(error);
       }
-    }, error => {
+    };
+
+    const errorBlock = error => {
       if (this.config.debug) {
         console.log('Got Error: ' + error.message);
       }
       if (callback !== undefined) {
         callback(error);
       }
-    });
+    };
+
+    ajax(requestUrl, successBlock, errorBlock);
   }
 
   mergeObject(obj1, obj2) {
@@ -185,7 +189,7 @@ class Maihoo {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  track(event, properties, callback) {
+  track(event, properties, callback, async = false) {
     this.properties = this.properties || {};
     const newProperties = properties || {};
     newProperties.time = this.getUnixtime();
@@ -208,7 +212,7 @@ class Maihoo {
       console.log(data);
     }
 
-    this.sendRequest(data, callback);
+    this.sendRequest(data, callback, async);
   }
 
   /**
@@ -240,8 +244,8 @@ const _mhq = window._mhq || '';
 const maihoo = new Maihoo(_mhq);
 maihoo.track('page start');
 
-window.onunload = () => {
-  maihoo.track('page end');
+window.onbeforeunload = () => {
+  maihoo.track('page end', null, null, false);
 };
 
 global.maihoo = maihoo;
