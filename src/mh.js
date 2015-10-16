@@ -70,7 +70,7 @@ class Maihoo {
 
     const successBlock = responseData => {
       // Got some data
-      if (callback !== undefined) {
+      if (callback) {
         const error = (responseData !== '1')
         ? new Error('Maihoo Server Error') : undefined;
         callback(error);
@@ -81,7 +81,7 @@ class Maihoo {
       if (this.config.debug) {
         console.log('Got Error: ' + error.message);
       }
-      if (callback !== undefined) {
+      if (callback) {
         callback(error);
       }
     };
@@ -251,6 +251,7 @@ maihoo.track('page start');
 
 window.onbeforeunload = () => {
   maihoo.track('page end', null, null, false);
+  return 'page end';
 };
 
 global.maihoo = maihoo;
