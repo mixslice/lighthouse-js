@@ -167,6 +167,7 @@ class Maihoo {
   getShareLink(link) {
     const openid = this.properties.openid;
     const cid = this.properties.__cid__;
+    const target = this.properties.target;
 
     let share = link || location.href;
 
@@ -174,7 +175,11 @@ class Maihoo {
     share = this.removeURLParameter(share, 'state');
     share = this.removeURLParameter(share, '__cid__');
     share = this.removeURLParameter(share, '__pid__');
-    share = share.split('#')[0] + '&__cid__=' + openid + '&__pid__=' + cid;
+    share = this.removeURLParameter(share, '__target__');
+    share = share.split('#')[0]
+      + '&__cid__=' + openid
+      + '&__pid__=' + cid
+      + '&__target__=' + target;
 
     return share;
   }
