@@ -251,7 +251,6 @@ maihoo.track('page start');
 
 window.onbeforeunload = () => {
   maihoo.track('page end', null, null, false);
-  return 'page end';
 };
 
 global.maihoo = maihoo;
