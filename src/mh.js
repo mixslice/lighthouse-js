@@ -249,8 +249,15 @@ const _mhq = window._mhq || '';
 const maihoo = new Maihoo(_mhq);
 maihoo.track('page start');
 
-window.onbeforeunload = () => {
-  maihoo.track('page end', null, null, false);
-};
+const pageshow = () => maihoo.track('page start');
+const pagehide = () => maihoo.track('page end');
+
+if (window.onpagehide || window.onpagehide === null) {
+  window.addEventListener('pageshow', pageshow, false);
+  window.addEventListener('pagehide', pagehide, false);
+} else {
+  window.addEventListener('load', pageshow, false);
+  window.addEventListener('unload', pagehide, false);
+}
 
 global.maihoo = maihoo;
