@@ -1,0 +1,185 @@
+import {
+  getParameterByName,
+  removeURLParameter,
+  getCookie,
+  generateUUID,
+  getUnixtime,
+  ajax
+} from './MaihooUtils';
+
+export default class Maihoo {
+  constructor(token) {
+    this.token = token;
+
+    this.config = {
+      test: false,
+      debug: false,
+      endpoint_path: 'http://svr.digitwalk.com/gw/track'
+    };
+
+    let _mh = getCookie('_mh');
+    if (!_mh) {
+      _mh = generateUUID();
+      document.cookie = '_mh=' + _mh;
+    }
+    this.userIdentifier = _mh;
+  }
+
+  /**
+  send_request(data)
+  ---
+  this function sends an async GET request to mixpanel
+
+  data:object                     the data to send in the request
+  callback:function(err:Error)    callback is called when the request is
+  finished or an error occurs
+  */
+  sendRequest(data, callback, async = true) {
+    const requestData = JSON.parse(JSON.stringify(data));
+
+    if (this.config.test) { requestData.test = 1; }
+
+    const requestUrl = this.config.endpoint_path;
+
+    const successBlock = responseData => {
+      // Got some data
+      if (callback) {
+        const error = (responseData !== '1')
+        ? new Error('Maihoo Server Error') : undefined;
+        callback(error);
+      }
+    };
+
+    const errorBlock = error => {
+      if (this.config.debug) {
+        console.log('Got Error: ' + error.message);
+      }
+      if (callback) {
+        callback(error);
+      }
+    };
+
+    ajax(requestUrl,
+      JSON.stringify(requestData),
+      successBlock,
+      errorBlock,
+      async);
+  }
+
+  mergeObject(obj1, obj2) {
+    for (const prop in obj2) {
+      if (obj2.hasOwnProperty(prop)) {
+        obj1[prop] = obj2[prop];
+      }
+    }
+  }
+
+  register(properties) {
+    this.properties = this.properties || {};
+    this.mergeObject(this.properties, properties);
+  }
+
+  identify(uid) {
+    this.register({ uid: this.userIdentifier });
+    this.userIdentifier = uid;
+  }
+
+  registerSocial(openid, service) {
+    const cid = getParameterByName('__cid__');
+    const pid = getParameterByName('__pid__');
+
+    if (openid && openid.length > 0) {
+      this.identify(openid);
+    }
+
+    const target = getParameterByName('__target__') || this.userIdentifier;
+
+    this.register({
+      target: target,
+      cid: cid,
+      pid: pid,
+      openid: openid,
+      service: service
+    });
+  }
+
+  getShareLink(link) {
+    const openid = this.properties.openid;
+    const cid = this.properties.__cid__;
+    const target = this.properties.target;
+
+    let share = link || location.href;
+
+    share = removeURLParameter(share, 'code');
+    share = removeURLParameter(share, 'state');
+    share = removeURLParameter(share, '__cid__');
+    share = removeURLParameter(share, '__pid__');
+    share = removeURLParameter(share, '__target__');
+    share = share.split('#')[0]
+      + '&__cid__=' + openid
+      + '&__pid__=' + cid
+      + '&__target__=' + target;
+
+    return share;
+  }
+
+  /**
+  track(event, properties, callback)
+  ---
+  this function sends an event to mixpanel
+
+  event:string                    the event name
+  properties:object               additional event properties to send
+  callback:function(err:Error)    callback is called when the request is
+  finished or an error occurs
+  */
+  track(event, properties, callback, async = true) {
+    this.properties = this.properties || {};
+    const newProperties = properties || {};
+    newProperties.time = getUnixtime();
+
+    const mergedProperties = JSON.parse(JSON.stringify(this.properties));
+    this.mergeObject(mergedProperties, newProperties);
+
+    const data = {
+      event: event,
+      projectToken: this.token,
+      properties: mergedProperties
+    };
+
+    if (this.userIdentifier) {
+      data.userIdentifier = this.userIdentifier;
+    }
+
+    if (this.config.debug) {
+      console.log('Sending the following event to Maihoo:');
+      console.log(data);
+    }
+
+    this.sendRequest(data, callback, async);
+  }
+
+  /**
+  * track link
+  */
+  trackLinks(query, event, properties) {
+    const els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
+    els.forEach(el => {
+      el.removeEventListener();
+      el.addEventListener('click', () =>
+      this.track(event, properties));
+    });
+  }
+
+  /**
+  set_config(config)
+  ---
+  Modifies the maihoo config
+
+  config:object       an object with properties to override in the
+  maihoo client config
+  */
+  setConfig(config) {
+    this.mergeObject(this.config, config);
+  }
+}
