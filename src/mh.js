@@ -149,11 +149,12 @@ class Maihoo {
   registerSocial(openid, service) {
     const cid = this.getParameterByName('__cid__');
     const pid = this.getParameterByName('__pid__');
-    const target = this.getParameterByName('__target__');
 
     if (openid && openid.length > 0) {
       this.identify(openid);
     }
+
+    const target = this.getParameterByName('__target__') || this.userIdentifier;
 
     this.register({
       target: target,
