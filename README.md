@@ -27,7 +27,6 @@ maihoo.track('myevent');
 var openid = <openid>    // 从微信或微博中获取openid，请自行补充
 var service = 'weixin'; // weixin 或者 weibo
 maihoo.registerSocial(openid, service);
-maihoo.track('view');
 ```
 
 微信转发
