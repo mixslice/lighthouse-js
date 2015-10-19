@@ -7,6 +7,13 @@ import {
   ajax
 } from './MaihooUtils';
 
+const COOKIE_KEY = '_mh';
+const CID_KEY = '__cid__';
+const PID_KEY = '__pid__';
+const TARGET_KEY = '__target__';
+const EVENT_LOGIN = 'login';
+const EVENT_CLICK = 'click';
+
 export default class Maihoo {
   constructor(token) {
     this.token = token;
@@ -17,16 +24,12 @@ export default class Maihoo {
       endpoint_path: 'http://svr.digitwalk.com/gw/track'
     };
 
-    let _mh = getCookie('_mh');
-    if (!_mh) {
-      _mh = generateUUID();
-      document.cookie = '_mh=' + _mh;
-    }
-    this.userIdentifier = _mh;
+    const uid = getCookie(COOKIE_KEY) || generateUUID();
+    this.identify(uid);
 
-    const cid = getParameterByName('__cid__');
-    const pid = getParameterByName('__pid__');
-    const target = getParameterByName('__target__') || this.userIdentifier;
+    const cid = getParameterByName(CID_KEY);
+    const pid = getParameterByName(PID_KEY);
+    const target = getParameterByName(TARGET_KEY) || this.userIdentifier;
 
     this.register({
       target: target,
@@ -92,9 +95,14 @@ export default class Maihoo {
   identify(uid) {
     this.register({ uid: this.userIdentifier });
     this.userIdentifier = uid;
+    document.cookie = COOKIE_KEY + '=' + this.userIdentifier;
   }
 
   registerSocial(openid, service) {
+    if (this.userIdentifier === openid) {
+      return;
+    }
+
     if (openid && openid.length > 0) {
       this.identify(openid);
     }
@@ -104,7 +112,7 @@ export default class Maihoo {
       service: service
     });
 
-    this.track('login');
+    this.track(EVENT_LOGIN);
   }
 
   getShareLink(link) {
@@ -116,13 +124,13 @@ export default class Maihoo {
 
     share = removeURLParameter(share, 'code');
     share = removeURLParameter(share, 'state');
-    share = removeURLParameter(share, '__cid__');
-    share = removeURLParameter(share, '__pid__');
-    share = removeURLParameter(share, '__target__');
+    share = removeURLParameter(share, CID_KEY);
+    share = removeURLParameter(share, PID_KEY);
+    share = removeURLParameter(share, TARGET_KEY);
     share = share.split('#')[0]
-      + '&__cid__=' + openid
-      + '&__pid__=' + cid
-      + '&__target__=' + target;
+      + '&' + CID_KEY + '=' + openid
+      + '&' + PID_KEY + '=' + cid
+      + '&' + TARGET_KEY + '=' + target;
 
     return share;
   }
@@ -170,7 +178,7 @@ export default class Maihoo {
     const els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
     els.forEach(el => {
       el.removeEventListener();
-      el.addEventListener('click', () =>
+      el.addEventListener(EVENT_CLICK, () =>
       this.track(event, properties));
     });
   }
