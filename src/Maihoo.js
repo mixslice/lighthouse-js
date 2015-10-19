@@ -101,6 +101,8 @@ export default class Maihoo {
       openid: openid,
       service: service
     });
+
+    this.track('login');
   }
 
   getShareLink(link) {
