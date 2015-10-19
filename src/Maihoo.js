@@ -23,6 +23,16 @@ export default class Maihoo {
       document.cookie = '_mh=' + _mh;
     }
     this.userIdentifier = _mh;
+
+    const cid = getParameterByName('__cid__');
+    const pid = getParameterByName('__pid__');
+    const target = getParameterByName('__target__') || this.userIdentifier;
+
+    this.register({
+      target: target,
+      cid: cid,
+      pid: pid
+    });
   }
 
   /**
@@ -85,19 +95,11 @@ export default class Maihoo {
   }
 
   registerSocial(openid, service) {
-    const cid = getParameterByName('__cid__');
-    const pid = getParameterByName('__pid__');
-
     if (openid && openid.length > 0) {
       this.identify(openid);
     }
 
-    const target = getParameterByName('__target__') || this.userIdentifier;
-
     this.register({
-      target: target,
-      cid: cid,
-      pid: pid,
       openid: openid,
       service: service
     });
