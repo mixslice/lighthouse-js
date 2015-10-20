@@ -29,7 +29,7 @@ export default class Maihoo {
 
     const cid = getParameterByName(CID_KEY);
     const pid = getParameterByName(PID_KEY);
-    const target = getParameterByName(TARGET_KEY) || this.userIdentifier;
+    const target = getParameterByName(TARGET_KEY);
 
     this.register({
       target: target,
