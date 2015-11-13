@@ -45,7 +45,7 @@ wx.ready(function(){
     type: '',
     dataUrl: '',
     success: function () {
-      c.track('shareMsg', { share: share });
+      maihoo.track('shareMsg', { share: share });
     },
     cancel: function () {
     }
@@ -56,7 +56,7 @@ wx.ready(function(){
     link: share,
     imgUrl: '',
     success: function () {
-      c.track('shareTimeline', { share: share });
+      maihoo.track('shareTimeline', { share: share });
     },
     cancel: function () {
     }
