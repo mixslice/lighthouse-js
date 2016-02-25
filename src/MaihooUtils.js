@@ -3,7 +3,8 @@ export function getParameterByName(name) {
   const newName = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
   const regex = new RegExp('[\\?&]' + newName + '=([^&#]*)');
   const results = regex.exec(location.search);
-  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  return results === null
+    ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
 export function updateQueryStringParameter(uri, key, value) {
@@ -43,10 +44,11 @@ export function getCookie(key) {
 
 export function generateUUID() {
   let date = new Date().getTime();
-  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, character => {
+  const uuidFormatString = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+  const uuid = uuidFormatString.replace(/[xy]/g, char => {
     const randNumber = (date + Math.random() * 16) % 16 | 0;
     date = Math.floor(randNumber / 16);
-    return (character === 'x' ? randNumber : (randNumber & 0x3 | 0x8)).toString(16);
+    return (char === 'x' ? randNumber : (randNumber & 0x3 | 0x8)).toString(16);
   });
   return uuid;
 }
