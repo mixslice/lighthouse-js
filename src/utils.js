@@ -57,20 +57,3 @@ export function generateUUID() {
 export function getUnixtime() {
   return parseInt(new Date().getTime().toString().substring(0, 10), 10);
 }
-
-export function ajax(url, data, success, failure, async) {
-  const xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        success(xhr.responseText);
-      } else {
-        failure(xhr.statusText);
-      }
-    }
-  };
-
-  xhr.open('POST', url, async);
-  xhr.setRequestHeader('Content-Type', 'text/plain');
-  xhr.send(data);
-}

@@ -10,5 +10,8 @@
     "no-console": 0,
     "no-alert": 0,
     "max-len": [2, 80, 4]
+  },
+  "globals": {
+    "__ENDPOINT__": true
   }
 }

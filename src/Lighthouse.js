@@ -3,25 +3,23 @@ import {
   removeURLParameter,
   getCookie,
   generateUUID,
-  getUnixtime,
-  ajax
-} from './MaihooUtils';
+  getUnixtime
+} from './utils';
 
 const COOKIE_KEY = '_mh';
 const CID_KEY = '__cid__';
 const PID_KEY = '__pid__';
 const TARGET_KEY = '__target__';
-const EVENT_LOGIN = 'login';
 const EVENT_CLICK = 'click';
 
-export default class Maihoo {
+export default class Lighthouse {
   constructor(token) {
     this.token = token;
 
     this.config = {
       test: false,
       debug: false,
-      endpoint_path: 'http://svr.digitwalk.com/gw/track'
+      endpoint_path: 'http://localhost:5000/track'
     };
 
     const uid = getCookie(COOKIE_KEY) || generateUUID();
@@ -32,6 +30,7 @@ export default class Maihoo {
     const target = getParameterByName(TARGET_KEY);
 
     this.register({
+      project_token: this.token,
       target: target,
       cid: cid,
       pid: pid
@@ -47,18 +46,18 @@ export default class Maihoo {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  sendRequest(data, callback, async = true) {
+  sendRequest(data, callback) {
     const requestData = JSON.parse(JSON.stringify(data));
 
     if (this.config.test) { requestData.test = 1; }
 
-    const requestUrl = this.config.endpoint_path;
+    const url = this.config.endpoint_path + '?data=' + data;
 
     const successBlock = responseData => {
       // Got some data
       if (callback) {
         const error = (responseData !== '1')
-        ? new Error('Maihoo Server Error') : undefined;
+        ? new Error('Lighthouse Server Error') : undefined;
         callback(error);
       }
     };
@@ -72,11 +71,20 @@ export default class Maihoo {
       }
     };
 
-    ajax(requestUrl,
-      JSON.stringify(requestData),
-      successBlock,
-      errorBlock,
-      async);
+    const checkStatus = response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response;
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    };
+
+    fetch(url)
+    .then(checkStatus)
+    .then(response => response.json())
+    .then(successBlock)
+    .catch(errorBlock);
   }
 
   mergeObject(obj1, obj2) {
@@ -93,9 +101,9 @@ export default class Maihoo {
   }
 
   identify(uid) {
-    this.register({ uid: this.userIdentifier });
     this.userIdentifier = uid;
-    document.cookie = COOKIE_KEY + '=' + this.userIdentifier;
+    this.register({ uid: uid });
+    document.cookie = COOKIE_KEY + '=' + uid;
   }
 
   registerSocial(openid, service) {
@@ -111,8 +119,6 @@ export default class Maihoo {
       openid: openid,
       service: service
     });
-
-    this.track(EVENT_LOGIN);
   }
 
   getShareLink(link) {
@@ -145,7 +151,7 @@ export default class Maihoo {
   callback:function(err:Error)    callback is called when the request is
   finished or an error occurs
   */
-  track(event, properties, callback, async = true) {
+  track(event, properties, callback) {
     this.properties = this.properties || {};
     const newProperties = properties || {};
     newProperties.time = getUnixtime();
@@ -155,20 +161,17 @@ export default class Maihoo {
 
     const data = {
       event: event,
-      projectToken: this.token,
       properties: mergedProperties
     };
 
-    if (this.userIdentifier) {
-      data.userIdentifier = this.userIdentifier;
-    }
-
     if (this.config.debug) {
-      console.log('Sending the following event to Maihoo:');
+      console.log('Sending the following event to Lighthouse:');
       console.log(data);
     }
 
-    this.sendRequest(data, callback, async);
+    // transfer to base64
+    const eventData = new Buffer(JSON.stringify(data)).toString('base64');
+    this.sendRequest(eventData, callback);
   }
 
   /**
@@ -186,10 +189,10 @@ export default class Maihoo {
   /**
   set_config(config)
   ---
-  Modifies the maihoo config
+  Modifies the lighthouse config
 
   config:object       an object with properties to override in the
-  maihoo client config
+  lighthouse client config
   */
   setConfig(config) {
     this.mergeObject(this.config, config);
