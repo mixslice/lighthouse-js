@@ -4,11 +4,11 @@ var webpack = require('webpack');
 module.exports = {
   debug: false,
   entry: [
-    './src/mh'
+    './src/global'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'mh.min.js',
+    filename: 'lighthouse.min.js',
     publicPath: '/static/'
   },
   plugins: [

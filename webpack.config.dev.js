@@ -5,11 +5,11 @@ module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client',
-    './src/mh'
+    './src/global'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'mh.min.js',
+    filename: 'lighthouse.min.js',
     publicPath: '/static/'
   },
   plugins: [

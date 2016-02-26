@@ -2,19 +2,44 @@
 
 ## Getting Started
 
-引入 script
+### npm module
+
+```
+npm install lighthouse-js --save
+```
+
+import mudule using ES5 style:
+
+```
+var Lighthouse = require('lighthouse-js');
+```
+
+ES2015 style:
+
+```
+import Lighthouse from 'lighthouse-js';
+```
+
+Create lighthouse instance:
+
+```
+const lighthouse = new Lighthouse(project_token);
+```
+
+
+### global import
 
 ```html
 <script type="text/javascript">
   var _mhq = <YOUR_PROJECT_NAME>;
 </script>
-<script src="http://track.digitwalk.com/mh.min.js"></script>
+<script src="http://track.digitwalk.com/lighthouse.min.js"></script>
 ```
 
 追踪事件
 
 ```javascript
-maihoo.track('myevent');
+lighthouse.track('myevent');
 ```
 
 ## 微信微博的数据监测
@@ -24,7 +49,7 @@ maihoo.track('myevent');
 ```javascript
 var openid = <openid>    // 从微信或微博中获取openid，请自行补充
 var service = 'weixin'; // weixin 或者 weibo
-maihoo.registerSocial(openid, service);
+lighthouse.registerSocial(openid, service);
 ```
 
 微信转发
@@ -32,8 +57,8 @@ maihoo.registerSocial(openid, service);
 ```javascript
 /* 修改微信转发链接 */
 wx.ready(function(){
-  // 如果没有link可以用 maihoo.getShareLink()
-  var share = maihoo.getShareLink(link);
+  // 如果没有link可以用 lighthouse.getShareLink()
+  var share = lighthouse.getShareLink(link);
 
   wx.onMenuShareAppMessage({
     title: 'Nysnetech | We brought you customers (NYST_APP_20150725)',
@@ -43,7 +68,7 @@ wx.ready(function(){
     type: '',
     dataUrl: '',
     success: function () {
-      maihoo.track('shareMsg', { share: share });
+      lighthouse.track('shareMsg', { share: share });
     },
     cancel: function () {
     }
@@ -54,7 +79,7 @@ wx.ready(function(){
     link: share,
     imgUrl: '',
     success: function () {
-      maihoo.track('shareTimeline', { share: share });
+      lighthouse.track('shareTimeline', { share: share });
     },
     cancel: function () {
     }
@@ -70,7 +95,7 @@ wx.ready(function(){
 如何有登录用户可以直接绑定 `id`，如无用户，则自动生成 `uuid` 写入浏览器 cookie:
 
 ```javascript
-maihoo.identify(<USER_ID>);
+lighthouse.identify(<USER_ID>);
 ```
 
 ### func: register(params)
@@ -78,7 +103,7 @@ maihoo.identify(<USER_ID>);
 对于每次都要发送的变量可以通过 `register` 方法发送:
 
 ```javascript
-maihoo.register({target: "target"});
+lighthouse.register({target: "target"});
 ```
 
 ### func: track(event, params)
@@ -86,13 +111,13 @@ maihoo.register({target: "target"});
 追踪事件:
 
 ```javascript
-maihoo.track('myevent', params);
+lighthouse.track('myevent', params);
 ```
 
 追踪 link 点击:
 
 ```javascript
-maihoo.trackLinks('a', 'link');
+lighthouse.trackLinks('a', 'link');
 ```
 
 ### func: registerSocial(openid, service)

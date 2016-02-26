@@ -1,6 +1,6 @@
-import Lighthouse from './Lighthouse';
+import Lighthouse from './lighthouse';
 
 const _mhq = window._mhq || '';
 const client = new Lighthouse(_mhq);
 
-global.mh = client;
+global.lighthouse = client;
