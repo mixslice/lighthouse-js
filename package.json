@@ -1,6 +1,5 @@
 {
   "name": "lighthouse-js",
-  "private": true,
   "version": "0.1.0",
   "description": "Ligthouse track script",
   "main": "src/lighthouse.js",
@@ -15,11 +14,14 @@
     "type": "git",
     "url": "http://gitlab.digitwalk.com/maihoo/lighthouse-js.git"
   },
-  "author": "Web Team",
-  "license": "CC0-1.0",
+  "author": "Maihoo Web Team <developer@maihoo.com>",
+  "license": "MIT",
   "bugs": {
     "url": "http://gitlab.digitwalk.com/maihoo/lighthouse-js/issues"
   },
+  "keywords": [
+    "lighthouse"
+  ],
   "homepage": "http://gitlab.digitwalk.com/maihoo/lighthouse-js",
   "dependencies": {
     "babel-core": "^6.5.2",
