@@ -19,7 +19,7 @@ export default class Lighthouse {
     this.config = {
       test: false,
       debug: false,
-      endpoint_path: 'http://localhost:5000/track'
+      endpoint_path: 'http://lighthouse.digitwalk.com/track'
     };
 
     const uid = getCookie(COOKIE_KEY) || generateUUID();

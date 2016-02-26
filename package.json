@@ -11,6 +11,16 @@
     "prebuild": "npm install --production",
     "start": "node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "http://gitlab.digitwalk.com/maihoo/lighthouse-js.git"
+  },
+  "author": "Web Team",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "http://gitlab.digitwalk.com/maihoo/lighthouse-js/issues"
+  },
+  "homepage": "http://gitlab.digitwalk.com/maihoo/lighthouse-js",
   "dependencies": {
     "babel-core": "^6.5.2",
     "babel-loader": "^6.2.3",
