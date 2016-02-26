@@ -8,8 +8,8 @@ module.exports = {
     './src/global'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'lighthouse.min.js',
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'lighthouse.global.js',
     publicPath: '/static/'
   },
   plugins: [
@@ -21,7 +21,6 @@ module.exports = {
       {
         test: /\.js$/,
         loaders: ['babel'],
-        include: path.join(__dirname, 'src'),
         exclude: /node_modules/
       }
     ]

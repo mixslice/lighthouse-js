@@ -2,13 +2,14 @@
   "name": "lighthouse-js",
   "version": "0.1.0",
   "description": "Ligthouse track script",
-  "main": "src/lighthouse.js",
+  "main": "dist/lighthouse.umd.js",
   "scripts": {
     "clean": "rimraf dist",
-    "build:webpack": "NODE_ENV=production webpack --config webpack.config.prod.js --bail",
-    "build": "npm run clean && npm run build:webpack",
+    "build:umd": "NODE_ENV=production webpack --config webpack/webpack.config.umd.js --bail",
+    "build:global": "NODE_ENV=production webpack --config webpack/webpack.config.global.js --bail",
+    "build": "npm run clean && make all",
     "prebuild": "npm install --production",
-    "start": "node server.js"
+    "start": "node webpack/server.js"
   },
   "repository": {
     "type": "git",

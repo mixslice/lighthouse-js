@@ -4,7 +4,7 @@ import {
   getCookie,
   generateUUID,
   getUnixtime
-} from './utils';
+} from 'utils';
 
 const COOKIE_KEY = '_mh';
 const CID_KEY = '__cid__';

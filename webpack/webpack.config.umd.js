@@ -4,12 +4,12 @@ var webpack = require('webpack');
 module.exports = {
   debug: false,
   entry: [
-    './src/global'
+    './src/lighthouse'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'lighthouse.min.js',
-    publicPath: '/static/'
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'lighthouse.umd.js',
+    libraryTarget: "umd"
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -18,21 +18,20 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
-      }
-    })
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   },
+    //   output: {
+    //     comments: false
+    //   }
+    // })
   ],
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
-        include: path.join(__dirname, 'src')
+        loaders: ['babel']
       }
     ]
   },
