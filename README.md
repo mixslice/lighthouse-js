@@ -33,7 +33,7 @@ const lighthouse = new Lighthouse(project_token);
 <script type="text/javascript">
   var _mhq = <YOUR_PROJECT_NAME>;
 </script>
-<script src="http://track.digitwalk.com/lighthouse.min.js"></script>
+<script src="http://track.digitwalk.com/lighthouse.global.js"></script>
 ```
 
 追踪事件
