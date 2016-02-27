@@ -51,7 +51,7 @@ export default class Lighthouse {
 
     if (this.config.test) { requestData.test = 1; }
 
-    const url = this.config.endpoint_path + '?data=' + data;
+    const url = this.config.endpoint_path + '?data=' + encodeURIComponent(data);
 
     const successBlock = responseData => {
       // Got some data
