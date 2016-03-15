@@ -16,7 +16,8 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-      __ENDPOINT__: JSON.stringify(process.env.ENDPOINT || "http://lighthouse.digitwalk.com"),
+      __ENDPOINT_DEV__: JSON.stringify(process.env.ENDPOINT || "http://lighthouse.digitwalk.com"),
+      __ENDPOINT_PROD__: JSON.stringify(process.env.ENDPOINT || "http://beta.lighthouse.digitwalk.com/")
     }),
   ],
   module: {
