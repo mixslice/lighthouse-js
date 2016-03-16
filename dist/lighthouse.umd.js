@@ -1927,7 +1927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.config = {
 	      test: false,
 	      debug: debug,
-	      endpoint_path: debug ? ("http://lighthouse.digitwalk.com") : ("http://beta.lighthouse.digitwalk.com/") + '/track'
+	      endpoint_path: debug ? ("http://lighthouse.digitwalk.com") : ("http://beta.lighthouse.digitwalk.com") + '/track'
 	    };
 
 	    var uid = (0, _utils.getCookie)(COOKIE_KEY) || (0, _utils.generateUUID)();
