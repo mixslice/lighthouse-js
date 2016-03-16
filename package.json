@@ -1,6 +1,6 @@
 {
   "name": "@mh/lighthouse-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Ligthouse track script",
   "main": "dist/lighthouse.umd.js",
   "scripts": {
