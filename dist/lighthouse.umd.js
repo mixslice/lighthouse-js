@@ -72,8 +72,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var base64 = __webpack_require__(5);
-	var ieee754 = __webpack_require__(9);
-	var isArray = __webpack_require__(6);
+	var ieee754 = __webpack_require__(8);
+	var isArray = __webpack_require__(9);
 
 	exports.Buffer = Buffer;
 	exports.SlowBuffer = SlowBuffer;
@@ -1582,7 +1582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	module.exports = { "default": __webpack_require__(7), __esModule: true };
+	module.exports = { "default": __webpack_require__(6), __esModule: true };
 
 /***/ },
 /* 3 */
@@ -1757,29 +1757,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var toString = {}.toString;
-
-	module.exports = Array.isArray || function (arr) {
-	  return toString.call(arr) == '[object Array]';
-	};
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var $ = __webpack_require__(8);
+	var $ = __webpack_require__(7);
 	module.exports = function defineProperty(it, key, desc) {
 	  return $.setDesc(it, key, desc);
 	};
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1799,7 +1787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1890,6 +1878,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var toString = {}.toString;
+
+	module.exports = Array.isArray || function (arr) {
+	  return toString.call(arr) == '[object Array]';
+	};
+
+/***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1919,14 +1919,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Lighthouse = function () {
 	  function Lighthouse(token) {
+	    var debug = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	    (0, _classCallCheck3.default)(this, Lighthouse);
 
 	    this.token = token;
 
 	    this.config = {
 	      test: false,
-	      debug: false,
-	      endpoint_path: 'http://lighthouse.digitwalk.com/track'
+	      debug: debug,
+	      endpoint_path: debug ? ("http://lighthouse.digitwalk.com") : ("http://beta.lighthouse.digitwalk.com/") + '/track'
 	    };
 
 	    var uid = (0, _utils.getCookie)(COOKIE_KEY) || (0, _utils.generateUUID)();
@@ -1965,7 +1966,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        requestData.test = 1;
 	      }
 
-	      var url = this.config.endpoint_path + '?data=' + data;
+	      var url = this.config.endpoint_path + '?data=' + encodeURIComponent(data);
 
 	      var successBlock = function successBlock(responseData) {
 	        // Got some data
