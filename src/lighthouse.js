@@ -13,13 +13,13 @@ const TARGET_KEY = '__target__';
 const EVENT_CLICK = 'click';
 
 export default class Lighthouse {
-  constructor(token) {
+  constructor(token, debug = false) {
     this.token = token;
 
     this.config = {
       test: false,
-      debug: false,
-      endpoint_path: __ENDPOINT__ + '/track'
+      debug: debug,
+      endpoint_path: (debug) ? __ENDPOINT_DEV__ : __ENDPOINT_PROD__ + '/track'
     };
 
     const uid = getCookie(COOKIE_KEY) || generateUUID();
