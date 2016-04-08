@@ -19,7 +19,7 @@ export default class Lighthouse {
     this.config = {
       test: false,
       debug: debug,
-      endpoint_path: (debug) ? __ENDPOINT_DEV__ : __ENDPOINT_PROD__ + '/track'
+      endpoint_path: __ENDPOINT__ + '/track'
     };
 
     const uid = getCookie(COOKIE_KEY) || generateUUID();

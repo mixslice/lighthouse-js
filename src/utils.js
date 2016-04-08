@@ -55,5 +55,5 @@ export function generateUUID() {
 
 // private utility function
 export function getUnixtime() {
-  return parseInt(new Date().getTime().toString().substring(0, 10), 10);
+  return parseInt(new Date().getTime().toString());
 }
