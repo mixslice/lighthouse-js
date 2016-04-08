@@ -14,7 +14,7 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
-      __ENDPOINT__: JSON.stringify(process.env.ENDPOINT || "http://lighthouse.digitwalk.com")
+      __ENDPOINT__: JSON.stringify(process.env.ENDPOINT || "http://lighthouse.digitwalk.com"),
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
