@@ -7,33 +7,22 @@ import {
 } from 'utils';
 
 const COOKIE_KEY = '_mh';
-const CID_KEY = '__cid__';
-const PID_KEY = '__pid__';
-const TARGET_KEY = '__target__';
-const EVENT_CLICK = 'click';
 
 export default class Lighthouse {
-  constructor(token, debug = false) {
+  constructor(token, test = false) {
     this.token = token;
 
     this.config = {
-      test: false,
-      debug: debug,
+      test: test,
+      debug: false,
       endpoint_path: __ENDPOINT__ + '/track'
     };
 
     const uid = getCookie(COOKIE_KEY) || generateUUID();
     this.identify(uid);
 
-    const cid = getParameterByName(CID_KEY);
-    const pid = getParameterByName(PID_KEY);
-    const target = getParameterByName(TARGET_KEY);
-
     this.register({
-      project_token: this.token,
-      target: target,
-      cid: cid,
-      pid: pid
+      project_token: this.token
     });
   }
 
@@ -106,41 +95,6 @@ export default class Lighthouse {
     document.cookie = COOKIE_KEY + '=' + uid;
   }
 
-  registerSocial(openid, service) {
-    if (this.userIdentifier === openid) {
-      return;
-    }
-
-    if (openid && openid.length > 0) {
-      this.identify(openid);
-    }
-
-    this.register({
-      openid: openid,
-      service: service
-    });
-  }
-
-  getShareLink(link) {
-    const openid = this.properties.openid;
-    const cid = this.properties.__cid__;
-    const target = this.properties.target;
-
-    let share = link || location.href;
-
-    share = removeURLParameter(share, 'code');
-    share = removeURLParameter(share, 'state');
-    share = removeURLParameter(share, CID_KEY);
-    share = removeURLParameter(share, PID_KEY);
-    share = removeURLParameter(share, TARGET_KEY);
-    share = share.split('#')[0]
-      + '&' + CID_KEY + '=' + openid
-      + '&' + PID_KEY + '=' + cid
-      + '&' + TARGET_KEY + '=' + target;
-
-    return share;
-  }
-
   /**
   track(event, properties, callback)
   ---
@@ -172,18 +126,6 @@ export default class Lighthouse {
     // transfer to base64
     const eventData = new Buffer(JSON.stringify(data)).toString('base64');
     this.sendRequest(eventData, callback);
-  }
-
-  /**
-  * track link
-  */
-  trackLinks(query, event, properties) {
-    const els = Array.prototype.slice.call(document.querySelectorAll(query), 0);
-    els.forEach(el => {
-      el.removeEventListener();
-      el.addEventListener(EVENT_CLICK, () =>
-      this.track(event, properties));
-    });
   }
 
   /**
