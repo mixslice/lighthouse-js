@@ -7,6 +7,9 @@ export function getParameterByName(name) {
     ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
+/**
+ * mark as deprecated
+ */
 export function updateQueryStringParameter(uri, key, value) {
   const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
   const separator = uri.indexOf('?') !== -1 ? '&' : '?';
@@ -17,6 +20,9 @@ export function updateQueryStringParameter(uri, key, value) {
   return uri + separator + key + '=' + value;
 }
 
+/**
+ * mark as deprecated
+ */
 export function removeURLParameter(url, parameter) {
   // prefer to use l.search if you have a location/link object
   const urlparts = url.split('?');
