@@ -1,6 +1,5 @@
 import {
-  getParameterByName,
-  removeURLParameter,
+  setCookie,
   getCookie,
   generateUUID,
   getUnixtime
@@ -19,7 +18,9 @@ export default class Lighthouse {
     };
 
     const uid = getCookie(COOKIE_KEY) || generateUUID();
-    this.identify(uid);
+    if (uid) {
+      this.identify(uid);
+    }
 
     this.register({
       project_token: this.token
@@ -92,7 +93,7 @@ export default class Lighthouse {
   identify(uid) {
     this.userIdentifier = uid;
     this.register({ uid: uid });
-    document.cookie = COOKIE_KEY + '=' + uid;
+    setCookie(COOKIE_KEY, uid);
   }
 
   /**
