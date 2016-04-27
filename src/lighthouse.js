@@ -50,11 +50,12 @@ export default class Lighthouse {
     const url = this.config.endpoint_path + '?data=' + encodeURIComponent(data);
 
     const successBlock = responseData => {
+      if (this.config.debug) {
+        console.log('response: ' + responseData);
+      }
       // Got some data
       if (callback) {
-        const error = (responseData !== '1')
-        ? new Error('Lighthouse Server Error') : undefined;
-        callback(error);
+        callback(responseData);
       }
     };
 
