@@ -1,3 +1,4 @@
+import es6Promise from 'es6-promise';
 import 'isomorphic-fetch';
 import {
   setCookie,
@@ -6,6 +7,9 @@ import {
   getUnixtime
 } from 'utils';
 
+if (typeof Promise !== 'function') {
+  es6Promise.polyfill();
+}
 
 const COOKIE_KEY = '_mh';
 
