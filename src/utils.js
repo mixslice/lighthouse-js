@@ -44,7 +44,16 @@ export function removeURLParameter(url, parameter) {
   return url;
 }
 
+export function setCookie(key, value) {
+  if (typeof(document) !== 'undefined') {
+    document.cookie = `${key}=${value}`;
+  }
+}
+
 export function getCookie(key) {
+  if (typeof(document) === 'undefined') {
+    return null;
+  }
   return (document.cookie.match('(^|; )' + key + '=([^;]*)') || 0)[2];
 }
 
