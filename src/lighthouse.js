@@ -1,9 +1,11 @@
+import 'isomorphic-fetch';
 import {
   setCookie,
   getCookie,
   generateUUID,
   getUnixtime
 } from 'utils';
+
 
 const COOKIE_KEY = '_mh';
 
