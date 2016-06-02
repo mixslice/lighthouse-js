@@ -44,10 +44,14 @@ export default class Lighthouse {
   */
   sendRequest(data, callback) {
     const requestData = JSON.parse(JSON.stringify(data));
+    if (this.config.test) { requestData.test = 1; }
 
-    // if (this.config.test) { requestData.test = 1; }
+    // transfer to base64
+    const eventData = new Buffer(JSON.stringify(requestData))
+    .toString('base64');
 
-    const url = this.config.endpoint_path + '?data=' + encodeURIComponent(data);
+    const url =
+    `${this.config.endpoint_path}?data=${encodeURIComponent(eventData)}`;
 
     const successBlock = responseData => {
       if (this.config.debug) {
@@ -131,9 +135,7 @@ export default class Lighthouse {
       console.log(data);
     }
 
-    // transfer to base64
-    const eventData = new Buffer(JSON.stringify(data)).toString('base64');
-    this.sendRequest(eventData, callback);
+    this.sendRequest(data, callback);
   }
 
   /**
