@@ -45,7 +45,7 @@ export default class Lighthouse {
   sendRequest(data, callback) {
     const requestData = JSON.parse(JSON.stringify(data));
 
-    if (this.config.test) { requestData.test = 1; }
+    // if (this.config.test) { requestData.test = 1; }
 
     const url = this.config.endpoint_path + '?data=' + encodeURIComponent(data);
 
