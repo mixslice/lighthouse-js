@@ -1,4 +1,4 @@
-import Lighthouse from 'lighthouse';
+import Lighthouse from './lighthouse';
 
 const _mhq = window._mhq || '';
 const client = new Lighthouse(_mhq);

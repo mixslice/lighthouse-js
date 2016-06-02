@@ -5,7 +5,7 @@ import {
   getCookie,
   generateUUID,
   getUnixtime
-} from 'utils';
+} from './utils';
 
 if (typeof Promise !== 'function') {
   es6Promise.polyfill();

@@ -9,7 +9,7 @@
     "build:global": "NODE_ENV=production webpack --config webpack/webpack.config.global.js --bail",
     "build": "npm run clean && make all",
     "prebuild": "npm install",
-    "start": "node webpack/server.js"
+    "test": "mocha --compilers js:babel-core/register --reporter spec --timeout 3000"
   },
   "repository": {
     "type": "git",
@@ -24,23 +24,20 @@
     "lighthouse"
   ],
   "homepage": "http://gitlab.digitwalk.com/maihoo/lighthouse-js",
-  "dependencies": {
-    "es6-promise": "^3.1.2",
-    "isomorphic-fetch": "^2.2.1"
-  },
   "devDependencies": {
     "babel-core": "^6.5.2",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.3",
-    "babel-plugin-transform-runtime": "^6.5.2",
     "babel-preset-es2015": "^6.5.0",
     "eslint": "^2.11.1",
     "eslint-config-airbnb-base": "^3.0.1",
     "eslint-plugin-import": "^1.8.1",
-    "express": "^4.13.3",
+    "mocha": "*",
     "rimraf": "^2.4.3",
-    "webpack": "^1.12.2",
-    "webpack-dev-middleware": "^1.2.0",
-    "webpack-hot-middleware": "^2.4.1"
+    "webpack": "^1.12.2"
+  },
+  "dependencies": {
+    "es6-promise": "^3.1.2",
+    "isomorphic-fetch": "^2.2.1"
   }
 }

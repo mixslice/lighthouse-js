@@ -49,12 +49,5 @@ module.exports = {
         loaders: ['babel']
       }
     ]
-  },
-  resolve: {
-    modulesDirectories: [
-      'src',
-      'node_modules'
-    ],
-    extensions: ['', '.json', '.js']
   }
 };
